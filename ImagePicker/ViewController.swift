@@ -11,19 +11,20 @@ import MobileCoreServices
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    @IBOutlet weak var imageView: UIImageView!
+    var controller = UIImagePickerController()
+    let videoFileName = "/video.mp4"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }
 
-    @IBAction func chooseImage(_ sender: Any) {
+    @IBAction func takeVideo(_ sender: Any) {
         
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
         
-        let actionSheet = UIAlertController(title: "Photo Source", message: "Choose a source", preferredStyle: .actionSheet)
+        let actionSheet = UIAlertController(title: "Video Source", message: "Choose a source", preferredStyle: .actionSheet)
         
         actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (action:UIAlertAction) in
             
@@ -40,8 +41,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
         }))
         
-        actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { (action:UIAlertAction) in
+        actionSheet.addAction(UIAlertAction(title: "Video Library", style: .default, handler: { (action:UIAlertAction) in
             imagePickerController.sourceType = .photoLibrary
+            imagePickerController.delegate = self
+            imagePickerController.mediaTypes = ["public.movie"]
             self.present(imagePickerController, animated: true, completion: nil)
             
         }))
@@ -52,25 +55,53 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     }
     
+    @IBAction func viewLibrary(_ sender: Any) {
+        // display my video library
+        controller.sourceType = UIImagePickerController.SourceType.photoLibrary
+        controller.mediaTypes = [kUTTypeMovie as String]
+        controller.delegate = self
+        
+        present(controller, animated: true, completion: nil)
+    }
+    
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        guard let selectedImage = info[.originalImage] as? UIImage else {
-            fatalError("expected a dic containing an image, but was provided with the following error: \(info)")
+        // 1
+        if let selectedVideo:URL = (info[UIImagePickerController.InfoKey.mediaURL] as? URL) {
+            // Save video to the main photo album
+            let selectorToCall = #selector(self.videoSaved(_:didFinishSavingWithError:context:))
+            
+            // 2
+            UISaveVideoAtPathToSavedPhotosAlbum(selectedVideo.relativePath, self, selectorToCall, nil)
+            // Save the video to the app directory
+            let videoData = try? Data(contentsOf: selectedVideo)
+            let paths = NSSearchPathForDirectoriesInDomains(
+                FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+            let documentsDirectory: URL = URL(fileURLWithPath: paths[0])
+            let dataPath = documentsDirectory.appendingPathComponent(videoFileName)
+            try! videoData?.write(to: dataPath, options: [])
         }
-        
-        imageView.image = selectedImage
-        
-        dismiss(animated: true, completion: nil)
+        // 3
+        picker.dismiss(animated: true)
+    }
+    
+    @objc func videoSaved(_ video: String, didFinishSavingWithError error: NSError!, context: UnsafeMutableRawPointer){
+        if let theError = error {
+            print("error saving the video = \(theError)")
+        } else {
+            DispatchQueue.main.async(execute: { () -> Void in
+            })
+        }
     }
  
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
     
-    override func didReceiveMemoryWarning() {
-            super.didReceiveMemoryWarning()
-            // dispose of any resources that can be recreated
-    }
+//        func didReceiveMemoryWarning() {
+//            super.didReceiveMemoryWarning()
+//            // dispose of any resources that can be recreated
+//    }
     
 }
 
