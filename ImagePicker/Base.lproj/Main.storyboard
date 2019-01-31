@@ -21,26 +21,55 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XSf-E6-2BZ">
                                 <rect key="frame" x="152" y="609" width="71" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <state key="normal" title="Add Video"/>
+                                <state key="normal" title="Add Video">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
                                 <connections>
                                     <action selector="takeVideo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rQr-zs-0PQ"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XoR-Bl-NeZ">
-                                <rect key="frame" x="145" y="318.5" width="85" height="30"/>
-                                <state key="normal" title="View Library"/>
+                                <rect key="frame" x="145" y="552" width="85" height="30"/>
+                                <state key="normal" title="View Library">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
                                 <connections>
                                     <action selector="viewLibrary:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1uV-nR-PcC"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fta-T6-BCQ">
+                                <rect key="frame" x="311" y="35" width="49" height="30"/>
+                                <state key="normal" title="Upload">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="uploadButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cbY-FC-tFq"/>
+                                    <action selector="uploadVideo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="UJc-w4-GpM"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9e3-IL-E6C">
+                                <rect key="frame" x="37.5" y="100" width="300" height="400"/>
+                                <color key="backgroundColor" red="1" green="0.50842995219999998" blue="0.001362889959" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="400" id="U0I-jK-qmB"/>
+                                    <constraint firstAttribute="width" constant="300" id="ULH-8V-uRc"/>
+                                </constraints>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="1" green="0.50842995219540521" blue="0.0013628899586825005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
-                            <constraint firstItem="XoR-Bl-NeZ" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="KWc-p5-jux"/>
+                            <constraint firstItem="fta-T6-BCQ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="15" id="96p-N7-IDs"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="fta-T6-BCQ" secondAttribute="trailing" constant="15" id="FQ7-XM-Lbx"/>
+                            <constraint firstItem="XoR-Bl-NeZ" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.7" id="KWc-p5-jux"/>
+                            <constraint firstItem="9e3-IL-E6C" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Kd4-ah-C3U"/>
+                            <constraint firstItem="9e3-IL-E6C" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.9" id="LbI-VK-ECZ"/>
                             <constraint firstItem="XoR-Bl-NeZ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="N8d-nS-xaC"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="viewVideo" destination="9e3-IL-E6C" id="Avn-5k-5Ed"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

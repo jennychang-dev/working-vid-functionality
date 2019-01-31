@@ -8,17 +8,25 @@
 
 import UIKit
 import MobileCoreServices
+import Firebase
+import MediaPlayer
+import AVKit
+
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-
+    
     var controller = UIImagePickerController()
     let videoFileName = "/video.mp4"
-    
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Do any additional setup after loading the view, typically from a nib.
     }
-
+    
+    @IBOutlet weak var viewVideo: UIView!
+    
     @IBAction func takeVideo(_ sender: Any) {
         
         let imagePickerController = UIImagePickerController()
@@ -51,8 +59,20 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
+        
         self.present(actionSheet, animated: true, completion: nil)
     
+    }
+    
+    @IBAction func uploadButton(_ sender: Any) {
+        // Configuration
+        let picker = UIImagePickerController()
+        picker.allowsEditing = true
+        picker.delegate = self
+        picker.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
+        
+        // Present the UIImagePicker Controller
+        present(picker, animated: true, completion: nil)
     }
     
     @IBAction func viewLibrary(_ sender: Any) {
@@ -64,16 +84,43 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         present(controller, animated: true, completion: nil)
     }
     
+    @IBAction func uploadVideo(_ sender: Any) {
+        
+        let picker = UIImagePickerController()
+        picker.allowsEditing = true
+        picker.delegate = self
+        picker.mediaTypes = [kUTTypeMovie as String]
+        
+        present(picker, animated: true, completion: nil)
+        
+    }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         // 1
         if let selectedVideo:URL = (info[UIImagePickerController.InfoKey.mediaURL] as? URL) {
+            
+            print("here's the file url:\(selectedVideo)")
+            
+            /// we upload here into video view here
+            
+            let player =  AVPlayer(url: selectedVideo)
+
+            let playerLayer = AVPlayerLayer(player: player)
+            
+            playerLayer.frame = self.viewVideo.bounds
+            self.viewVideo.layer.addSublayer(playerLayer)
+            player.play()
+            
+         // try and upload video to firebase
+            
             // Save video to the main photo album
             let selectorToCall = #selector(self.videoSaved(_:didFinishSavingWithError:context:))
             
             // 2
             UISaveVideoAtPathToSavedPhotosAlbum(selectedVideo.relativePath, self, selectorToCall, nil)
-            // Save the video to the app directory
+            
+            
+        // Save the video to the app directory
             let videoData = try? Data(contentsOf: selectedVideo)
             let paths = NSSearchPathForDirectoriesInDomains(
                 FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
